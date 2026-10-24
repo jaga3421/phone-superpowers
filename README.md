@@ -2,9 +2,12 @@
 
 **Your phone can do _that_ from a browser?** Phone-only web APIs most devs have never used, each with a live demo. Built for a talk at the Chennai web dev meetup.
 
-**Live:** https://jaga3421.github.io/phone-superpowers/
+By Jagadeesh Jayachandran, Lead Developer at Turing, for Chennai Web Engineering.
 
-Open it on your phone. Best on Chrome for Android; iPhones get fallbacks where Safari allows them.
+- **Slides:** https://jaga3421.github.io/phone-superpowers/ (arrow keys or swipe, `F` for fullscreen)
+- **Demos:** https://jaga3421.github.io/phone-superpowers/demo/
+
+Open the demos on your phone. Best on Chrome for Android; iPhones get fallbacks where Safari allows them.
 
 ## Crowd games
 

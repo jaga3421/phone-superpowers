@@ -5,37 +5,289 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b0b12">
   <title>Phone Superpowers</title>
-  <meta name="description" content="Phone-only web APIs most devs have never used, each with a live demo. Built for the Chennai web dev meetup.">
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Slides: phone-only web APIs most devs have never used. Chennai Web Engineering talk by Jagadeesh Jayachandran.">
+  <link rel="stylesheet" href="deck.css">
 </head>
 <body>
-  <header class="hero">
-    <p class="kicker">Chennai Web Dev Meetup</p>
-    <h1>Your phone can do <em>that</em> from a browser?</h1>
-    <p class="sub">Phone APIs you probably haven't touched. No app install, just this page. Tap a card to open the demo.</p>
-    <div class="hero-row">
-      <span id="tally" class="tally"></span>
-      <button id="qr-btn" class="ghost">Show QR</button>
+<div class="viewport">
+<main class="deck" id="deck">
+
+  <!-- 1. Title -->
+  <section class="slide title-slide" data-label="Title">
+    <div class="stagger">
+      <p class="kicker">Chennai Web Engineering</p>
+      <h1>Your phone can do <em>that</em><br>from a browser?</h1>
+      <p class="lead">Phone superpowers the web already has, and most of us never use.</p>
+      <div class="speaker">
+        <div class="avatar" aria-hidden="true">JJ</div>
+        <div>
+          <p class="name">Jagadeesh Jayachandran</p>
+          <p class="role">Lead Developer · Turing</p>
+        </div>
+      </div>
     </div>
-    <label class="check filter"><input type="checkbox" id="only-ok"> Only show what works on this phone</label>
-    <p id="insecure" class="status" data-kind="err" hidden>This page isn't on HTTPS, so most of these APIs are switched off. Open the https:// link instead.</p>
-  </header>
+  </section>
 
-  <main id="demos"></main>
-
-  <footer>
-    <p>Best on Chrome for Android. iPhones get fallbacks where Safari allows them.</p>
-  </footer>
-
-  <div id="stage" hidden></div>
-  <div id="qr" hidden>
-    <div class="qr-box">
-      <div id="qr-code"></div>
-      <p id="qr-url"></p>
-      <button class="ghost" id="qr-close">Close</button>
+  <!-- 2. Agenda -->
+  <section class="slide" data-label="Agenda">
+    <div class="stagger">
+      <p class="kicker">Agenda</p>
+      <h2>Today</h2>
+      <ol class="agenda">
+        <li><span>01</span>Lights off, phones out</li>
+        <li><span>02</span>Your phone can sense things</li>
+        <li><span>03</span>Your phone has hardware</li>
+        <li><span>04</span>Native-feeling phone UX</li>
+        <li><span>05</span>Android vs iPhone, honestly</li>
+        <li><span>06</span>Game time</li>
+        <li><span>07</span>Takeaways &amp; Q&amp;A</li>
+      </ol>
     </div>
-  </div>
+  </section>
 
-  <script src="app.js"></script>
+  <!-- 3. Hook -->
+  <section class="slide split" data-label="Lights off">
+    <div class="stagger">
+      <p class="kicker">01 · Lights off, phones out</p>
+      <h2>Scan this.<br>Don’t tap anything yet.</h2>
+      <p class="lead">Open <b>Audience light show</b>. When I count to three, everyone taps <b>Rainbow</b>.</p>
+      <p class="url demo-url"></p>
+    </div>
+    <div class="qr-frame"><div class="qr" data-qr></div></div>
+  </section>
+
+  <!-- 4. 5% -->
+  <section class="slide" data-label="The 5%">
+    <div class="stagger">
+      <p class="kicker">Why this talk</p>
+      <h2>We use about <em>5%</em> of the phone.</h2>
+      <div class="two-col">
+        <div class="panel">
+          <h3>What we usually use</h3>
+          <ul class="ticks">
+            <li>Touch</li><li>Camera (for a profile photo)</li><li>Geolocation (for a map)</li>
+          </ul>
+        </div>
+        <div class="panel glow">
+          <h3>What’s actually there</h3>
+          <ul class="ticks">
+            <li>Gyroscope, accelerometer, compass</li><li>Flashlight, NFC, Bluetooth</li><li>SMS OTP, contacts, haptics</li><li>Native share sheet, wake lock, AR</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">No app store. No install. One URL.</p>
+    </div>
+  </section>
+
+  <!-- 5. Motion -->
+  <section class="slide" data-label="Motion">
+    <div class="stagger">
+      <p class="kicker">02 · Senses</p>
+      <h2>Motion: the phone knows how you move it</h2>
+<pre><code>// iOS needs a tap first, then the same events as Android
+await DeviceMotionEvent.requestPermission?.();
+
+addEventListener('devicemotion', e =&gt; {
+  const { alpha, beta, gamma } = e.rotationRate;   // degrees per second
+  const speed = Math.hypot(alpha, beta, gamma);
+  if (speed &gt; 350) castSpell();                   // a wand flick
+});</code></pre>
+      <p class="try">Try it: <b>Magic wand duel</b> · <b>Shake battle</b> · <b>Tilt the ball</b></p>
+    </div>
+  </section>
+
+  <!-- 6. Compass -->
+  <section class="slide" data-label="Compass">
+    <div class="stagger">
+      <p class="kicker">02 · Senses</p>
+      <h2>Compass: which way is Marina Beach?</h2>
+<pre><code>// Android: true north on a separate event
+addEventListener('deviceorientationabsolute', e =&gt; heading = 360 - e.alpha);
+
+// iOS: a non-standard field on the normal event
+addEventListener('deviceorientation', e =&gt; heading = e.webkitCompassHeading);
+
+arrow.style.rotate = `${bearingTo(MARINA) - heading}deg`;</code></pre>
+      <p class="try">Try it: <b>Point to Marina Beach</b></p>
+    </div>
+  </section>
+
+  <!-- 7. Mic -->
+  <section class="slide" data-label="Microphone">
+    <div class="stagger">
+      <p class="kicker">02 · Senses</p>
+      <h2>The microphone is a sensor, not just a recorder</h2>
+<pre><code>const mic = await navigator.mediaDevices.getUserMedia({ audio: true });
+const analyser = audioCtx.createAnalyser();
+audioCtx.createMediaStreamSource(mic).connect(analyser);
+
+analyser.getByteTimeDomainData(buf);
+const loudness = rms(buf);            // blowing on the mic = very loud
+balloon.scale += loudness * 0.12;</code></pre>
+      <p class="try">Try it: <b>Blow to pop the balloon</b></p>
+    </div>
+  </section>
+
+  <!-- 8. Torch -->
+  <section class="slide" data-label="Flashlight">
+    <div class="stagger">
+      <p class="kicker">03 · Hardware</p>
+      <h2>The flashlight is a camera setting</h2>
+<pre><code>const stream = await navigator.mediaDevices.getUserMedia({
+  video: { facingMode: 'environment' },
+});
+const [track] = stream.getVideoTracks();
+
+if (track.getCapabilities().torch) {
+  await track.applyConstraints({ advanced: [{ torch: true }] });
+}</code></pre>
+      <p class="try">That’s how the light show worked. iPhone falls back to flashing the screen.</p>
+    </div>
+  </section>
+
+  <!-- 9. NFC -->
+  <section class="slide" data-label="NFC">
+    <div class="stagger">
+      <p class="kicker">03 · Hardware</p>
+      <h2>NFC: read and write a ₹10 sticker</h2>
+<pre><code>const nfc = new NDEFReader();
+
+await nfc.scan();
+nfc.onreading = ({ message }) =&gt; show(message.records);
+
+// Write this page’s link. Anyone who taps it opens the site.
+await nfc.write({ records: [{ recordType: 'url', data: location.href }] });</code></pre>
+      <p class="try">Ideas: event check-in, treasure hunts, a “tap for menu” table sticker</p>
+    </div>
+  </section>
+
+  <!-- 10. Bluetooth + Barcode -->
+  <section class="slide" data-label="Bluetooth & scanner">
+    <div class="stagger">
+      <p class="kicker">03 · Hardware</p>
+      <h2>Bluetooth gadgets and a built-in scanner</h2>
+      <div class="two-col">
+<pre><code>// Read a smartwatch battery
+const dev = await navigator.bluetooth
+  .requestDevice({ acceptAllDevices: true,
+    optionalServices: ['battery_service'] });
+const gatt = await dev.gatt.connect();
+// …getCharacteristic('battery_level')</code></pre>
+<pre><code>// QR + barcodes, no library
+const detector = new BarcodeDetector();
+const codes = await detector.detect(video);
+
+codes.forEach(c =&gt; log(c.rawValue));
+// UPI QR, biscuit packets, tickets</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. OTP -->
+  <section class="slide" data-label="SMS OTP">
+    <div class="stagger">
+      <p class="kicker">04 · Native-feeling UX</p>
+      <h2>Read the OTP straight from the SMS</h2>
+      <div class="two-col wide-left">
+<pre><code>const { code } = await navigator.credentials.get({
+  otp: { transport: ['sms'] },
+});
+input.value = code;</code></pre>
+        <div>
+          <p class="small-label">The SMS just needs this last line:</p>
+<pre class="sms"><code>Your code is 424242
+
+@yourapp.com #424242</code></pre>
+          <p class="small-label">iPhone: <code>autocomplete="one-time-code"</code> shows it above the keyboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Contacts, share, haptics -->
+  <section class="slide" data-label="Phone UX">
+    <div class="stagger">
+      <p class="kicker">04 · Native-feeling UX</p>
+      <h2>Small APIs that make a site feel like an app</h2>
+      <div class="tiles">
+        <div class="tile"><b>Contact picker</b><code>contacts.select(['name', 'tel'])</code><span>User picks; you only get what they tick</span></div>
+        <div class="tile"><b>Share files</b><code>navigator.share({ files: [png] })</code><span>Straight into WhatsApp or Instagram</span></div>
+        <div class="tile"><b>Haptics</b><code>navigator.vibrate([80, 100, 80])</code><span>iPhone trick: toggle a switch input</span></div>
+        <div class="tile"><b>Wake lock</b><code>wakeLock.request('screen')</code><span>Recipes, tickets, presentations</span></div>
+        <div class="tile"><b>Voice, in Tamil</b><code>recognition.lang = 'ta-IN'</code><span>Say “sivappu” and the box goes red</span></div>
+        <div class="tile"><b>Foldables</b><code>navigator.devicePosture.type</code><span>Knows when the phone is half-folded</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. Platform reality -->
+  <section class="slide" data-label="Platform reality">
+    <div class="stagger">
+      <p class="kicker">05 · Android vs iPhone, honestly</p>
+      <h2>Android Chrome gets most of it</h2>
+      <table class="support">
+        <thead><tr><th></th><th>Android Chrome</th><th>iPhone Safari</th></tr></thead>
+        <tbody>
+          <tr><td>Motion, compass, mic, share, wake lock, speech</td><td class="y">Yes</td><td class="y">Yes</td></tr>
+          <tr><td>Flashlight, vibration</td><td class="y">Yes</td><td class="m">Workarounds</td></tr>
+          <tr><td>NFC, Bluetooth, contacts, barcode, WebOTP</td><td class="y">Yes</td><td class="n">No</td></tr>
+        </tbody>
+      </table>
+      <ul class="rules">
+        <li><b>HTTPS</b> or nothing works</li>
+        <li>Start from a <b>user tap</b></li>
+        <li><b>Feature-detect</b>, then fall back</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 14. Game time -->
+  <section class="slide split" data-label="Game time">
+    <div class="stagger">
+      <p class="kicker">06 · Game time</p>
+      <h2>Idli vs Dosa.<br>Shake for your team.</h2>
+      <p class="lead">Open <b>Shake battle</b>, pick a side, and shake when I say go. Then: wand duels.</p>
+      <p class="url demo-url"></p>
+    </div>
+    <div class="qr-frame"><div class="qr" data-qr></div></div>
+  </section>
+
+  <!-- 15. Takeaways -->
+  <section class="slide" data-label="Takeaways">
+    <div class="stagger">
+      <p class="kicker">07 · Takeaways</p>
+      <h2>Before you reach for a native app…</h2>
+      <ol class="takeaways">
+        <li><b>Check the web first.</b> Sensors, NFC, Bluetooth and OTP are a few lines of JS.</li>
+        <li><b>Build for Android, degrade for iPhone.</b> Feature-detect every API.</li>
+        <li><b>Make it physical.</b> Shaking, tilting and tapping stickers is what people remember.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 16. Thanks -->
+  <section class="slide split" data-label="Thanks">
+    <div class="stagger">
+      <p class="kicker">Thank you · Questions?</p>
+      <h2>Jagadeesh Jayachandran</h2>
+      <p class="lead">Lead Developer · Turing</p>
+      <dl class="links">
+        <dt>Demos</dt><dd class="demo-url"></dd>
+        <dt>Code</dt><dd>github.com/jaga3421/phone-superpowers</dd>
+      </dl>
+    </div>
+    <div class="qr-frame"><div class="qr" data-qr></div></div>
+  </section>
+
+</main>
+</div>
+
+<div class="hud" aria-hidden="true">
+  <div class="progress"><i id="progress"></i></div>
+  <span id="counter"></span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="deck.js"></script>
 </body>
 </html>
