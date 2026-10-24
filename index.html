@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0b12">
+  <title>Phone Superpowers</title>
+  <meta name="description" content="Phone-only web APIs most devs have never used, each with a live demo. Built for the Chennai web dev meetup.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <p class="kicker">Chennai Web Dev Meetup</p>
+    <h1>Your phone can do <em>that</em> from a browser?</h1>
+    <p class="sub">Phone APIs you probably haven't touched. No app install, just this page. Tap a card to open the demo.</p>
+    <div class="hero-row">
+      <span id="tally" class="tally"></span>
+      <button id="qr-btn" class="ghost">Show QR</button>
+    </div>
+    <label class="check filter"><input type="checkbox" id="only-ok"> Only show what works on this phone</label>
+    <p id="insecure" class="status" data-kind="err" hidden>This page isn't on HTTPS, so most of these APIs are switched off. Open the https:// link instead.</p>
+  </header>
+
+  <main id="demos"></main>
+
+  <footer>
+    <p>Best on Chrome for Android. iPhones get fallbacks where Safari allows them.</p>
+  </footer>
+
+  <div id="stage" hidden></div>
+  <div id="qr" hidden>
+    <div class="qr-box">
+      <div id="qr-code"></div>
+      <p id="qr-url"></p>
+      <button class="ghost" id="qr-close">Close</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
